@@ -1,0 +1,6 @@
+<h3>Liste observable</h3>
+<nb-list *ngIf="liste.length > 0">
+    <nb-list-item *ngFor="let e of liste">
+        {{e.lastname}} {{e.firstname}}
+    </nb-list-item>
+</nb-list>
