@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NbGlobalLogicalPosition, NbToastrService } from '@nebular/theme';
-import { ApiAuthService, User } from './api-auth.service';
+import { ApiAuthService, Movie, User } from './api-auth.service';
 
 @Component({
   selector: 'app-demo3',
@@ -10,6 +10,8 @@ import { ApiAuthService, User } from './api-auth.service';
 export class Demo3Component implements OnInit {
 
   currentUser : User = {}
+  listeFilm : Movie[] = []
+  currentMovie : Movie = {}
 
   constructor(
     private _auth : ApiAuthService,
@@ -17,8 +19,14 @@ export class Demo3Component implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    
+    
+  }
+
+  connexion() {
     this._auth.connect().subscribe(
       (u : User) => {
+        localStorage.clear()
         this.currentUser = u
         localStorage.setItem('token', u.token ?? '')
         console.log(u)
@@ -28,8 +36,22 @@ export class Demo3Component implements OnInit {
       (error) => {this._toastr.danger(error.message, {duration : 50000})},
       () => {this._toastr.info("Traitement de la méthode connect() terminée", "titre", { position : NbGlobalLogicalPosition.BOTTOM_END})}
     )
-    
-    
+  }
+
+  getMovies() {
+    this._auth.getAll().subscribe(
+      (valueFromService : Movie[]) => {
+        this.listeFilm = valueFromService; 
+        console.log(this.listeFilm)
+    })
+  }
+
+  getOne(){
+    this._auth.getOne(1).subscribe((m : Movie) => this.currentMovie = m)
+  }
+
+  getMC() {
+    this._auth.getMovieWithComment(1).subscribe((m : Movie) => console.log(m))
   }
 
 }

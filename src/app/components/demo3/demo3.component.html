@@ -1,2 +1,14 @@
 <p>demo3 works!</p>
 email : {{currentUser.email}}
+<p><button nbButton (click)="connexion()">Se connecter</button></p>
+<p><button nbButton (click)="getMovies()">Get List</button></p>
+<p><button nbButton (click)="getOne()">Get One</button></p>
+<p><button nbButton (click)="getMC()">Get Comment</button></p>
+
+<p>
+    Titre : {{currentMovie.title}}
+</p>
+
+<select formControlName="titreDuFilm">
+    <option *ngFor="let m of listeFilm" [value]="m.id">{{m.title}}</option>
+</select>

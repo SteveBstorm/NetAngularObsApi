@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AuthService } from './auth.service';
 
@@ -7,7 +7,7 @@ import { AuthService } from './auth.service';
   templateUrl: './demo2.component.html',
   styleUrls: ['./demo2.component.scss']
 })
-export class Demo2Component implements OnInit {
+export class Demo2Component implements OnInit, OnDestroy {
 
   status : boolean = false
 
@@ -19,8 +19,19 @@ export class Demo2Component implements OnInit {
 
   ngOnInit(): void {
     //this.status = (Boolean)(localStorage.getItem('status')) ?? false
-    this._auth.statusSubject.subscribe((value : boolean) => {this.status = value; console.log("on déclenche le délégate")})
+    this.statusSub = this._auth.statusSubject.subscribe(this.test())
     this._auth.emitStatus()
+  }
+
+  ngOnDestroy() : void {
+    this.statusSub.unsubscribe()
+  }
+
+  test() {
+    return (value : boolean) => {
+      this.status = value; 
+      console.log("on déclenche le délégate")
+    }
   }
 
   login() {
